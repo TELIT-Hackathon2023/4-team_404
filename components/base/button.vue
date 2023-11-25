@@ -1,34 +1,37 @@
 <template>
-    <button class="base-button">
+    <button 
+        class="base-button"
+        :class="{border: border}">
         <slot>Log in</slot>
     </button>
 </template>
 
-<script>
-export default {
-    name: "base-button"
-}
+<script>  
+  export default {
+    name: "base-button",
+    props: {
+      border: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  };
 </script>
 
 <style scoped>
     .base-button{
-        width: 284px;
-        text-decoration: none;
-        padding: 12px 0;
-        border-radius: 6px;
-        background-color: #1B74AC;
-        color: #F8FAFF;
-        display: inline-block;
+        display: block;
+        width: 250px;
+        padding: 13px 0px;
+        border-radius: 8px;
+        border: 2px solid #E10075;
+        background: #371B29;
+        cursor: pointer;
+    }
+    .border{
+        background: white;
         border: none;
-        font-family: Helvetica;
-        font-size: 18px;
-    }
-    .base-button:disabled{
-        pointer-events: none;
-        background-color: #8CB6D1;
-    }
-    .base-button:active{
-        background-color: #2E495A;
+        background: #E10075;
     }
     
 </style>
