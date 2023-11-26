@@ -35,7 +35,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+
 	name: "Chat",
 
 	data() {
@@ -83,16 +85,36 @@ export default {
 				return;
 			}
 			if(this.indexOfCurrentChate != -1){
-				this.chateHistory[this.indexOfCurrentChate].push(this.request);
-				
+				this.chateHistory[this.indexOfCurrentChate].push(this.request.trim());
+				// axios.post("https://127.0.0.1:5000", {
+				// 	text: this.request,
+				// })
+				// .then((response) => console.log(response.data))
+				// .then((error) => console.log(error));
+				const requestData = { query: this.request };
+
+				fetch('https://127.0.0.1:5000', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(requestData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					// Обработка ответа от сервера, например, вывод на консоль
+					console.log('Chat history:', data.chat_history);
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
 			}
 			else{
 				this.namesOfChates.unshift("New chat " + this.counter);
-				this.chateHistory.unshift([this.request]);
-				this.request = "";
+				this.chateHistory.unshift([this.request.trim()]);
 				this.counter++;
 			}
-			
+			this.request = "";
 		},
 	},
 };
