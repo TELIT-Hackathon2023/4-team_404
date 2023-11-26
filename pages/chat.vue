@@ -9,31 +9,27 @@
 				</div>
 			</div>
 			<div class="prompts">
-				<div class="prompt-card"
-					v-for="name in namesOfChates"
-					:key="name"
-					@click="changeCurrentChat(name)"
-				>
+				<div class="prompt-card" v-for="name in namesOfChates" :key="name" @click="changeindexOfCurrentChate(name)">
 					<div class="hr-card"></div>
 					<div class="chat-name">{{ name }}</div>
 					<img @click.stop="handleRemove(name)" src="../assets/img/bin.svg" alt="" class="bin" />
 				</div>
-				
 			</div>
 		</div>
-		<div class="chat-bot" v-if="currentChat">
-			<div class="film-name">
-				<div class="text">{{currentChat}}</div>
+		<div class="chat-bot">
+			<div class="film-name" v-if="indexOfCurrentChate != -1">
+				<div class="text">{{ namesOfChates[indexOfCurrentChate] }}</div>
 				<div class="hr-chat"></div>
 			</div>
-			<div class="chat">
-				<div class="message">Why do certain filmmakers gravitate towards specific genres, and how does the choice of genre impact the overall narrative and audience engagement?</div>
-				<div class="message user-prompt">Why do certain filmmakers gravitate towards specific genres, and how does the choice of genre impact the overall narrative and audience engagement?</div>
-				<div class="message">In the vast galaxy of cinema, where storytelling takes on myriad forms and emotions, questions often arise, leading us to explore the depths of narrative creativity and filmmaking magic. Join us on a journey through the lens of uncertainty as we delve into the world of films and pose intriguing questions that spark curiosity and contemplation. Join us on a journey through the lens of uncertainty as we delve into the world of films and.</div>
-				<div class="message user-prompt">In the vast galaxy of cinema, where storytelling takes on myriad forms and emotions, questions often arise, leading us to explore the depths of narrative creativity and filmmaking magic. Join us on a journey through the lens of uncertainty as we delve into the world of films and pose intriguing questions that spark curiosity and contemplation. Join us on a journey through the lens of uncertainty as we delve into the world of films and.</div>
-				<div class="message">Why do certain filmmakers gravitate towards specific genres, and how does the choice of genre impact the overall narrative and audience engagement?</div>
+			<div class="chat" v-for="(mes, i) in chateHistory[indexOfCurrentChate]" :key="i">
+				<div class="message" :class="{ 'user-prompt': i % 2 == 0 }">{{ mes }}</div>
 			</div>
-			<BaseInput></BaseInput>
+			<div class="input__wrapper" :class="{ to_bottom: indexOfCurrentChate == -1 }">
+				<div class="input__inner">
+					<input :class="{ input: true }" v-model="request" placeholder="Write down your question..." @keyup.enter="createContinueChate"  />
+					<img class="input__img" src="../assets/img/send_button.svg" @click="createContinueChate" />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -44,33 +40,61 @@ export default {
 
 	data() {
 		return {
-			namesOfChates: [
-				"Film Titanic questions",
-				"Film Twilight questions",
-				"Anime Death Note questions",
-				"Cartoon Avatar questions",
-				"Film Harry Potter questions",
-				"Anime Attack on Titan questions",
-				"Film Star Wars questions",
-				"Film Jurassic Park questions",
-				"Cartoon Tom and Jerry questions",
+			namesOfChates: ["Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+			indexOfCurrentChate: -1,
+			chateHistory: [
+				["1Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["2Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["3Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["4Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["5Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["6Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["7Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["8Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["9Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
 			],
-			currentChat: "",
-			chatHistory: [[],[],[],[],[]],
+			request: "",
+			counter: 1
 		};
 	},
 	methods: {
-		changeCurrentChat(chat){
-			this.currentChat = chat;
+		changeindexOfCurrentChate(chate) {
+			this.indexOfCurrentChate = this.namesOfChates.findIndex((el) => el == chate);
 		},
 		handleRemove(chateToRemove) {
-			if(this.currentChat == chateToRemove) this.currentChat = 0;
+			if (this.indexOfCurrentChate == this.namesOfChates.findIndex((el) => el == chateToRemove)) this.indexOfCurrentChate = -1;
+			let indexOfDeleteHistoryChate;
 			this.namesOfChates = this.namesOfChates.filter((n, i) => {
-				if (n !== chateToRemove) return true;
+				if (n !== chateToRemove) {
+					indexOfDeleteHistoryChate = i;
+					return true;
+				}
+				return false;
+			});
+
+			this.chateHistory = this.chateHistory.filter((el, k) => {
+				if (k != indexOfDeleteHistoryChate) return true;
 				return false;
 			});
 		},
-	}
+		createContinueChate() {
+			if(this.request.trim() == ""){
+				this.request = "";
+				return;
+			}
+			if(this.indexOfCurrentChate != -1){
+				this.chateHistory[this.indexOfCurrentChate].push(this.request);
+				
+			}
+			else{
+				this.namesOfChates.unshift("New chat " + this.counter);
+				this.chateHistory.unshift([this.request]);
+				this.request = "";
+				this.counter++;
+			}
+			
+		},
+	},
 };
 </script>
 
@@ -79,7 +103,7 @@ export default {
 .container {
 	display: flex;
 }
-.bin{
+.bin {
 	cursor: pointer;
 }
 .history {
@@ -110,7 +134,7 @@ export default {
 	font-size: 22px;
 	font-weight: 400;
 }
-.prompts{
+.prompts {
 	flex: 1;
 	overflow-y: scroll;
 }
@@ -152,11 +176,11 @@ export default {
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
-	padding: 35px 130px 90px 130px ;
+	padding: 35px 130px 90px 130px;
 	height: 100vh;
 }
 
-.film-name{
+.film-name {
 	position: relative;
 	font-size: 32px;
 	font-weight: 700;
@@ -164,13 +188,14 @@ export default {
 	align-items: center;
 	margin-bottom: 10px;
 }
-.chat{
+.chat {
 	flex: 1;
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
+	position: relative;
 }
-.hr-chat{
+.hr-chat {
 	padding: 0;
 	border: none;
 	flex: 1;
@@ -178,7 +203,7 @@ export default {
 	background: #e10075;
 	margin-left: 35px;
 }
-.film-name::before{
+.film-name::before {
 	position: absolute;
 	left: -130px;
 	content: "";
@@ -188,17 +213,55 @@ export default {
 	height: 2px;
 	background: #e10075;
 }
-.input__wrapper{
+.input__wrapper {
 	margin-top: 10px;
 }
-.message{
+.message {
 	font-size: 20px;
 	width: 700px;
 	padding: 10px 15px;
-	background: #371B29;
+	background: #371b29;
 	margin-top: 30px;
 }
-.user-prompt{
+.user-prompt {
 	align-self: flex-end;
+}
+.to_bottom {
+	margin-top: 775px;
+}
+.input__wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+.input {
+	color: black;
+	padding: 16px 55px 16px 40px;
+	width: inherit;
+	outline: none;
+	font-family: "Inter", sans-serif;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 500;
+	border-radius: 15px;
+	background: #ede3e8;
+	border: none;
+}
+.input__inner {
+	width: inherit;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.input__img {
+	box-sizing: content-box;
+	display: block;
+	position: absolute;
+	cursor: pointer;
+	right: 0;
+	width: 28px;
+	height: 28px;
+	bottom: 12px;
+	padding-right: 27px;
 }
 </style>

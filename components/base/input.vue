@@ -1,7 +1,7 @@
 <template>
-	<div class="input__wrapper">
-		<div class="input__inner">
-			<input :class="{ input: true }" v-model="value" placeholder="Write down your question..." />
+	<div class="input__wrapper" >
+		<div class="input__inner" >
+			<input :class="{ input: true }" placeholder="Write down your question..." />
 			<img class="input__img" src="../../assets/img/send_button.svg" />
 		</div>
 	</div>
@@ -40,6 +40,7 @@
 	right: 0;
 	width: 28px;
 	height: 28px;
+	bottom: 12px;
 	padding-right: 27px;
 }
 </style>

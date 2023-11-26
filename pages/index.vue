@@ -5,10 +5,10 @@
 			<div class="description">Here you can find a movie to watch and get some information about it from our chat assistant. Get started!</div>
 			<hr class="hr" />
 			<div class="button-row">
-				<BaseButton></BaseButton>
+				<BaseButton @click="this.$router.push('/login')"></BaseButton>
 				<BaseButton border @click="this.$router.push('/login')" >Sign up</BaseButton>
 			</div>
-			<BaseButton>Quick question</BaseButton>
+			<BaseButton @click="this.$router.push('/login')">Quick question</BaseButton>
 		</div>
 	</div>
 </template>
