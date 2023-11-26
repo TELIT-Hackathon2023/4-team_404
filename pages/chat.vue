@@ -26,7 +26,7 @@
 			</div>
 			<div class="input__wrapper" :class="{ to_bottom: indexOfCurrentChate == -1 }">
 				<div class="input__inner">
-					<input :class="{ input: true }" v-model="request" placeholder="Write down your question..." @keyup.enter="createContinueChate"  />
+					<input :class="{ input: true }" v-model="request" placeholder="Write down your question..." @keyup.enter="createContinueChate" />
 					<img class="input__img" src="../assets/img/send_button.svg" @click="createContinueChate" />
 				</div>
 			</div>
@@ -35,9 +35,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
-
 	name: "Chat",
 
 	data() {
@@ -45,7 +44,7 @@ export default {
 			namesOfChates: ["Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
 			indexOfCurrentChate: -1,
 			chateHistory: [
-				["1Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
+				["1Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions"],
 				["2Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
 				["3Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
 				["4Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
@@ -56,7 +55,7 @@ export default {
 				["9Film Titanic questions", "Film Twilight questions", "Anime Death Note questions", "Cartoon Avatar questions", "Film Harry Potter questions", "Anime Attack on Titan questions", "Film Star Wars questions", "Film Jurassic Park questions", "Cartoon Tom and Jerry questions"],
 			],
 			request: "",
-			counter: 1
+			counter: 1,
 		};
 	},
 	methods: {
@@ -80,47 +79,66 @@ export default {
 			});
 		},
 		createContinueChate() {
-			if(this.request.trim() == ""){
+			if (this.request.trim() == "") {
 				this.request = "";
 				return;
 			}
-			if(this.indexOfCurrentChate != -1){
+			if (this.indexOfCurrentChate != -1) {
 				this.chateHistory[this.indexOfCurrentChate].push(this.request.trim());
 
-				axios.post("https://127.0.0.1:5000/find_data", {
-					query: this.request.trim(),
-				})
-				.then((response) => console.log(response.data))
-				.then((error) => console.log(error));
+				axios
+					.post("https://127.0.0.1:5000/find_data", {
+						query: this.request.trim(),
+					})
+					.then((response) => {
+						console.log(response.data);
+						this.chateHistory[this.indexOfCurrentChate].push(response.data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 
 
-				axios.get('https://127.0.0.1:5000/find_data')
-				.then(response => {
-					this.chateHistory[this.indexOfCurrentChate].push(response.data);
-				})
-				.catch(error => {
-					console.error('Error fetching data:', error);
-				});
-
-			}
-			else{
+				axios
+					.get("https://127.0.0.1:5000/find_data", {
+						params: {
+							query: this.request.trim(),
+						},
+					})
+					.then((response) => {
+						console.log(response.data);
+						this.chateHistory[this.indexOfCurrentChate].push(response.data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			} else {
 				this.namesOfChates.unshift("New chat " + this.counter);
 				this.chateHistory.unshift([this.request.trim()]);
 
-				axios.post("https://127.0.0.1:5000/find_data", {
-					query: this.request.trim(),
-				})
-				.then((response) => console.log(response.data))
-				.then((error) => console.log(error));
+				axios
+					.post("https://127.0.0.1:5000/find_data", {
+						query: this.request.trim(),
+					})
+					.then((response) => {
+						console.log(response.data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 
-
-				axios.get('https://127.0.0.1:5000/find_data')
-				.then(response => {
-					this.chateHistory[0].push(response.data);
-				})
-				.catch(error => {
-					console.error('Error fetching data:', error);
-				});
+				axios
+					.get("https://127.0.0.1:5000/find_data", {
+						params: {
+							query: this.request.trim(),
+						},
+					})
+					.then((response) => {
+						this.chateHistory[0].push(response.data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 
 				this.counter++;
 			}
