@@ -6,7 +6,7 @@
 			<hr class="hr" />
 			<div class="button-row">
 				<BaseButton></BaseButton>
-				<BaseButton border>Sign up</BaseButton>
+				<BaseButton border @click="this.$router.push('/login')" >Sign up</BaseButton>
 			</div>
 			<BaseButton>Quick question</BaseButton>
 		</div>

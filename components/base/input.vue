@@ -1,23 +1,11 @@
 <template>
 	<div class="input__wrapper">
 		<div class="input__inner">
-			<input :class="{ input: true }" required :value="value" @input="$emit('input', $event)" placeholder="Write down your question..." />
+			<input :class="{ input: true }" v-model="value" placeholder="Write down your question..." />
 			<img class="input__img" src="../../assets/img/send_button.svg" />
 		</div>
 	</div>
 </template>
-
-<script>
-export default {
-	name: "input",
-	props: {
-		value: {
-			type: String,
-			default: "",
-		},
-	},
-};
-</script>
 
 <style scoped>
 .input__wrapper {

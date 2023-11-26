@@ -9,87 +9,21 @@
 				</div>
 			</div>
 			<div class="prompts">
-				<div class="prompt-card">
+				<div class="prompt-card"
+					v-for="name in namesOfChates"
+					:key="name"
+					@click="changeCurrentChat(name)"
+				>
 					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
+					<div class="chat-name">{{ name }}</div>
+					<img @click.stop="handleRemove(name)" src="../assets/img/bin.svg" alt="" class="bin" />
 				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
-				<div class="prompt-card">
-					<div class="hr-card"></div>
-					<div class="chat-name">Film Titanic questions</div>
-					<img src="../assets/img/bin.svg" alt="" class="bin" />
-				</div>
+				
 			</div>
 		</div>
-		<div class="chat-bot">
+		<div class="chat-bot" v-if="currentChat">
 			<div class="film-name">
-				<div class="text">Film Titanic questions</div>
+				<div class="text">{{currentChat}}</div>
 				<div class="hr-chat"></div>
 			</div>
 			<div class="chat">
@@ -103,10 +37,50 @@
 		</div>
 	</div>
 </template>
+
+<script>
+export default {
+	name: "Chat",
+
+	data() {
+		return {
+			namesOfChates: [
+				"Film Titanic questions",
+				"Film Twilight questions",
+				"Anime Death Note questions",
+				"Cartoon Avatar questions",
+				"Film Harry Potter questions",
+				"Anime Attack on Titan questions",
+				"Film Star Wars questions",
+				"Film Jurassic Park questions",
+				"Cartoon Tom and Jerry questions",
+			],
+			currentChat: "",
+			chatHistory: [[],[],[],[],[]],
+		};
+	},
+	methods: {
+		changeCurrentChat(chat){
+			this.currentChat = chat;
+		},
+		handleRemove(chateToRemove) {
+			if(this.currentChat == chateToRemove) this.currentChat = 0;
+			this.namesOfChates = this.namesOfChates.filter((n, i) => {
+				if (n !== chateToRemove) return true;
+				return false;
+			});
+		},
+	}
+};
+</script>
+
 <style>
 @import url("~/assets/css/global.css");
 .container {
 	display: flex;
+}
+.bin{
+	cursor: pointer;
 }
 .history {
 	width: 650px;
@@ -188,6 +162,7 @@
 	font-weight: 700;
 	display: flex;
 	align-items: center;
+	margin-bottom: 10px;
 }
 .chat{
 	flex: 1;
