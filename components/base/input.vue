@@ -23,7 +23,7 @@ export default {
 .input__wrapper {
 	display: flex;
 	flex-direction: column;
-	width: 600px;
+	width: 100%;
 }
 .input {
 	color: black;
